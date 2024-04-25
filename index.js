@@ -84,4 +84,12 @@ tf.tidy(() => {
         "Alternativo",
         "Latino"
     ]
+
+    const user_votes = tf.tensor2d([[]])
+
+    const band_feats = tf.tensor2d([
+        [1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 1, 0, 1, 1, 0, 0, 0],
+        [0, 1, 0, 1, 1, 0, 0, 0],
+    ])
 })
