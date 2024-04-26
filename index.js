@@ -1,8 +1,12 @@
-const form = document.getElementById('formulario').addEventListener('submit', (event) => {
-    event.preventDefault()
+const userPoints = []
 
-    console.log(Array.from(event.target));
+document.getElementById('formulario').addEventListener('submit', (e) => {
+    e.preventDefault()
 
+    let inputs = Array.from(e.target)
+    inputs.pop()
+    inputs.forEach(element => userPoints.push(parseInt(element.value)))
+    obtainUserFeats()
 })
 
 // Tidy to auto-clean all these tensors
@@ -61,35 +65,48 @@ tf.tidy(() => {
     })
   })
 
-tf.tidy(() => {
-    const bands = [
-        "Nirvana",
-        "Cuarteto de Nos",
-        "Soda Stereo",
-        "Coldplay",
-        "Ed Sheeran",
-        "Fall out boys",
-        "Skillet",
-        "Shakira",
-        "Maná",
-    ]
-
-    const features = [
-        "Grunge",
-        "Rock",
-        "Punk",
-        "Pop",
-        "Folk",
-        "Metal",
-        "Alternativo",
-        "Latino"
-    ]
-
-    const user_votes = tf.tensor2d([[]])
-
-    const band_feats = tf.tensor2d([
-        [1, 1, 1, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 1, 0, 0, 0],
-        [0, 1, 0, 1, 1, 0, 0, 0],
-    ])
-})
+function obtainUserFeats () {
+  tf.tidy(() => {
+      const bands = [
+          "Nirvana",
+          "Cuarteto de Nos",
+          "Soda Stereo",
+          "Coldplay",
+          "Ed Sheeran",
+          "Fall out boys",
+          "Skillet",
+          "Shakira",
+          "Maná",
+      ]
+  
+      const features = [
+          "Grunge",
+          "Rock",
+          "Punk",
+          "Pop",
+          "Folk",
+          "Metal",
+          "Alternativo",
+          "Latino"
+      ]
+  
+      const user_votes = tf.tensor2d([userPoints])
+  
+      const band_feats = tf.tensor2d([
+          [1, 1, 1, 0, 0, 0, 0, 0],
+          [0, 1, 0, 1, 1, 0, 0, 0],
+          [0, 1, 0, 1, 0, 0, 1, 0],
+          [0, 1, 0, 1, 0, 0, 1, 0],
+          [0, 0, 0, 1, 1, 0, 0, 0],
+          [0, 1, 1, 1, 0, 0, 1, 0],
+          [1, 1, 0, 0, 0, 1, 1, 0],
+          [0, 0, 0, 1, 0, 0, 0, 1],
+          [0, 1, 0, 1, 0, 0, 1, 1],
+      ])
+  
+      // User's favorite styles
+      const user_feats = tf.matMul(user_votes, band_feats)
+      // Print the answers
+      user_feats.print()
+  })
+}
